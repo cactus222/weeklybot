@@ -18,5 +18,5 @@ var ClassToBuffMapping = map[string]BuffType{
 var BuffToStringMapping = map[BuffType]string{
 	BLUE: "BB",
 	SB:   "SB",
-	NONE: "  ",
+	NONE: "DPS",
 }

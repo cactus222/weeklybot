@@ -92,9 +92,6 @@ func GetRuns(spreadsheetId string, rangeString string) []Run {
 
 	// Prints the names and majors of students in a sample spreadsheet:
 	// https://docs.google.com/spreadsheets/d/1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms/edit
-	//spreadsheetId := "1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms"
-	// spreadsheetId := "1Ej6FpGlhQs8wK6It60675tkwpxnpXOZGF33WmlMtJDE"
-	// ranges := []string{"A2:C6", "E2:G6"}
 
 	ranges := strings.Split(rangeString, ",") //strings.Split("A2:C6,E2:G6,I2:K6", ",")
 	resp, err := srv.Spreadsheets.Values.BatchGet(spreadsheetId).Ranges(ranges...).Do()
