@@ -28,9 +28,10 @@ func init() {
 //https://github.com/Chikachi/DiscordIntegration/wiki/How-to-get-a-token-and-channel-ID-for-Discord
 var nameToIDMap map[string]string;
 
-var currentRunNum = 0
+var currentRunNum = -1
 var runs = []Run{}
-var weeklyRoleID = ""
+var weeklyRoleID = "419110547703726090"
+//TODO temp hack
 
 func main() {
 	if (sheetID == "") {
@@ -51,29 +52,31 @@ func main() {
 
 //todo
 	//params these too
-	var run1 = []Person {
-		Person {
-			Name:"wat",
-			Dmg:500,
-			Buff:SB,
-		},
-		Person {
-			Name:"celvie",
-			Dmg:50430,
-			Buff:BLUE,
-		},
-		Person {
-			Name:"wa23t",
-			Dmg:504320,
-			Buff:NONE,
-		},
-	}
-	runs = append(runs, Run{
-		Runners:run1,
-	})
-	// refreshRuns()
-	fmt.Println(generateRunString(runs[currentRunNum]))
+	// var run1 = []Person {
+	// 	Person {
+	// 		Name:"wat",
+	// 		Dmg:500,
+	// 		Buff:SB,
+	// 	},
+	// 	Person {
+	// 		Name:"celvie",
+	// 		Dmg:50430,
+	// 		Buff:BLUE,
+	// 	},
+	// 	Person {
+	// 		Name:"wa23t",
+	// 		Dmg:504320,
+	// 		Buff:NONE,
+	// 	},
+	// }
+	// runs = append(runs, Run{
+	// 	Runners:run1,
+	// })
+	// // refreshRuns()
+	// fmt.Println(generateRunString(runs[currentRunNum]))
 	
+
+	runs = GetRuns(sheetID, ranges);
 	setupDiscord();
 
 	saveNameToIDMap();
@@ -147,7 +150,7 @@ func refreshRuns() {
 	// fmt.Println(botToken)
 	// fmt.Println(ranges)
 	// fmt.Println(sheetID)
-	currentRunNum = 0
+	currentRunNum = -1
 
 }
 
@@ -200,6 +203,7 @@ func onMessageReceived(session *discordgo.Session, msg *discordgo.MessageCreate)
 	sentMessage = strings.ToLower(sentMessage);
 	if strings.HasPrefix(sentMessage, "!weekly ") {
 		if (strings.Contains(sentMessage, "next")) {
+			currentRunNum += 1
 			if currentRunNum >= len(runs) {
 				session.ChannelMessageSend(msg.ChannelID, "There are no more runs... :shy:")
 			} else {
@@ -208,13 +212,14 @@ func onMessageReceived(session *discordgo.Session, msg *discordgo.MessageCreate)
 
 				session.ChannelMessageSend(msg.ChannelID, response)
 			}
-			currentRunNum += 1
 		} else if (strings.Contains(sentMessage, "reset")) {
 			refreshRuns()
 			var response = fmt.Sprintf("Runs reset: %d runs found.", len(runs));
 			session.ChannelMessageSend(msg.ChannelID, response)
 		} else if (strings.Contains(sentMessage, "status")) {
-			if currentRunNum >= len(runs) {
+			if currentRunNum < 0 {
+				session.ChannelMessageSend(msg.ChannelID, "Hasn't started yet, or didnt update. :shy:")
+			} else if currentRunNum >= len(runs) {
 				session.ChannelMessageSend(msg.ChannelID, "There are no more runs... :shy:")
 			} else {
 				var response = fmt.Sprintf("Currently on group %c of weeklies. \n", currentRunNum+'A') + generateRunString(runs[currentRunNum]);
