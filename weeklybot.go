@@ -31,7 +31,7 @@ var nameToIDMap map[string]string;
 var currentRunNum = -1
 var runs = []Run{}
 var weeklyRoleID = "419110547703726090"
-//TODO temp hack
+//TODO temp hack, make it a map
 
 func main() {
 	if (sheetID == "") {
@@ -164,7 +164,7 @@ func generateRunString(run Run) string {
 		    //do something here
 		    mention = fmt.Sprintf("<@%s>", id)
 		}
-		str.WriteString(fmt.Sprintf("Player %d: %s %s %s \n", idx, person.Name, BuffToStringMapping[person.Buff], mention))
+		str.WriteString(fmt.Sprintf("Player %d: %s %s %s %s \n", idx, person.Name, person.Class, BuffToStringMapping[person.Buff], mention))
 	}
 
 	return str.String()

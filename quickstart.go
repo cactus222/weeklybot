@@ -119,6 +119,7 @@ func GetRuns(spreadsheetId string, rangeString string) []Run {
 						var runner = Person{
 							Name: batchValues[0].(string),
 							Buff: ClassToBuffMapping[strings.ToUpper(batchValues[1].(string))],
+							Class: strings.ToUpper(batchValues[1].(string))
 							Dmg:  dmg,
 						}
 						run = append(run, runner)
