@@ -243,7 +243,6 @@ func onMessageReceived(session *discordgo.Session, msg *discordgo.MessageCreate)
 		} else {
 			session.ChannelMessageSend(msg.ChannelID, "huh?? :shy:")
 		}
-		
 
 	}
 }
