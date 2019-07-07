@@ -192,6 +192,9 @@ func getWeeklyRoleID(session *discordgo.Session, guildID string) string {
 	return weeklyRoleID
 }
 
+func getShyString() string {
+	return "<:shy:315716970219569152>"
+}
 func onMessageReceived(session *discordgo.Session, msg *discordgo.MessageCreate) {
 
 	// This isn't required in this specific example but it's a good practice.
@@ -205,7 +208,7 @@ func onMessageReceived(session *discordgo.Session, msg *discordgo.MessageCreate)
 		if (strings.Contains(sentMessage, "next")) {
 			currentRunNum += 1
 			if currentRunNum >= len(runs) {
-				session.ChannelMessageSend(msg.ChannelID, "There are no more runs... :shy:")
+				session.ChannelMessageSend(msg.ChannelID, fmt.Sprintf("There are no more runs... %s", getShyString()))
 			} else {
 				// str.WriteString()
 				var response = fmt.Sprintf("Group %c of weeklies is starting. <@&%s> \n", currentRunNum+'A', getWeeklyRoleID(session, msg.GuildID)) + generateRunString(runs[currentRunNum]);
@@ -218,9 +221,9 @@ func onMessageReceived(session *discordgo.Session, msg *discordgo.MessageCreate)
 			session.ChannelMessageSend(msg.ChannelID, response)
 		} else if (strings.Contains(sentMessage, "status")) {
 			if currentRunNum < 0 {
-				session.ChannelMessageSend(msg.ChannelID, "Hasn't started yet, or didnt update. :shy:")
+				session.ChannelMessageSend(msg.ChannelID, fmt.Sprintf("Hasn't started yet, or didnt update. %s", getShyString()))
 			} else if currentRunNum >= len(runs) {
-				session.ChannelMessageSend(msg.ChannelID, "There are no more runs... :shy:")
+				session.ChannelMessageSend(msg.ChannelID, fmt.Sprintf("There are no more runs... %s", getShyString()))
 			} else {
 				var response = fmt.Sprintf("Currently on group %c of weeklies. \n", currentRunNum+'A') + generateRunString(runs[currentRunNum]);
 
@@ -233,7 +236,7 @@ func onMessageReceived(session *discordgo.Session, msg *discordgo.MessageCreate)
 				var name = strings.ToLower(tokens[2]);
 				var ownerID = msg.Author.ID;
 				nameToIDMap[name] = ownerID;
-				session.ChannelMessageSend(msg.ChannelID, fmt.Sprintf("registered '%s' as <@%s>, you will be mentioned. :shy:", name, ownerID));
+				session.ChannelMessageSend(msg.ChannelID, fmt.Sprintf("registered '%s' as <@%s>, you will be mentioned. %s", name, ownerID, getShyString()));
 			} else {
 				session.ChannelMessageSend(msg.ChannelID, "failed to register");
 			}
@@ -241,7 +244,7 @@ func onMessageReceived(session *discordgo.Session, msg *discordgo.MessageCreate)
 		}  else if (strings.Contains(sentMessage, "registrants")) {
 			session.ChannelMessageSend(msg.ChannelID, fmt.Sprintf("I know these people\n%s", generateNameToIDMapString()))
 		} else {
-			session.ChannelMessageSend(msg.ChannelID, "huh?? :shy:")
+			session.ChannelMessageSend(msg.ChannelID, fmt.Sprintf("huh?? %s", getShyString()))
 		}
 
 	}
